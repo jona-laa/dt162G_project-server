@@ -83,7 +83,7 @@ const routes = (app) => {
 
     .post(addNewProject)
 
-  app.route('/projects/:projectsID')
+  app.route('/projects/:projectID')
     .get(getProjectByID)
 
     .put(updateProject)

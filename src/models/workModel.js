@@ -5,22 +5,26 @@ const Schema = mongoose.Schema
 export const WorkSchema = new Schema({
   company: {
     type: String,
-    requred: 'Enter company name'
+    required: true
   },
   title: {
     type: String,
-    required: 'Enter work title'
+    required: true
   },
   date_start: {
     type: Date,
-    required: 'Enter start date'
+    required: true
   },
   date_end: {
     type: Date,
-    required: 'Enter end date'
+    required: true
   },
   descr: {
     type: String,
-    required: 'Enter work description'
+    required: true
   }
-})
+},
+  {
+    timestamps: true,
+    collection: 'work'
+  });

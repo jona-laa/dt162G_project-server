@@ -24,6 +24,7 @@ export const getProjects = (req, res) => {
 }
 
 export const getProjectByID = (req, res) => {
+  console.log('prj by id runs', req.params.projectID)
   Project.findById(req.params.projectID, (err, project) => {
     if (err) {
       res.send(err)

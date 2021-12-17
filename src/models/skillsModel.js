@@ -5,10 +5,14 @@ const Schema = mongoose.Schema
 export const SkillsSchema = new Schema({
   skill: {
     type: String,
-    requred: 'Enter skill name'
+    required: true
   },
   icon: {
     type: String,
-    required: 'Enter Font-Awesome icon code'
+    required: true
   }
-})
+},
+  {
+    timestamps: true,
+    collection: 'skills'
+  })

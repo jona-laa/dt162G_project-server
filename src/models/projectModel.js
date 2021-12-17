@@ -5,18 +5,22 @@ const Schema = mongoose.Schema
 export const ProjectSchema = new Schema({
   title: {
     type: String,
-    required: 'Enter project name'
+    required: true
   },
   project_url: {
     type: String,
-    required: 'Enter project url'
+    required: true
   },
   img_src: {
     type: String,
-    required: 'Enter image source'
+    required: true
   },
   descr: {
     type: String,
-    required: 'Enter course description'
+    required: true
   }
-})
+},
+  {
+    timestamps: true,
+    collection: 'projects'
+  })

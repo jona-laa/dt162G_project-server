@@ -5,14 +5,18 @@ const Schema = mongoose.Schema
 export const AboutSchema = new Schema({
   heading: {
     type: String,
-    requred: 'Enter a heading'
+    requred: true,
   },
-  bio: {
+  bio: [{
     type: String,
-    required: 'Enter a bio section'
-  },
+    required: true
+  }],
   img_src: {
     type: String,
-    required: 'Enter image source'
+    required: true
   }
-})
+},
+  {
+    timestamps: true,
+    collection: 'about'
+  })

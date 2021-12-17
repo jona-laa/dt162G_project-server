@@ -5,22 +5,26 @@ const Schema = mongoose.Schema
 export const StudiesSchema = new Schema({
   institution: {
     type: String,
-    requred: 'Enter institution'
+    required: true
   },
   title: {
     type: String,
-    required: 'Enter course name'
+    required: true
   },
   date_start: {
     type: Date,
-    required: 'Enter start date'
+    required: true
   },
   date_end: {
     type: Date,
-    required: 'Enter end date'
+    required: true
   },
   descr: {
     type: String,
-    required: 'Enter course description'
+    required: true
   }
-})
+},
+  {
+    timestamps: true,
+    collection: 'studies'
+  })
