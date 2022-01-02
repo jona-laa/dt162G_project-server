@@ -1,20 +1,25 @@
-import mongoose from 'mongoose'
-import { StudiesSchema } from '../models/studiesModel.js'
+const mongoose = require('mongoose');
+const { StudiesDBSchema, StudiesValSchema } = require('../models/studiesModel.js');
 
-const Studies = mongoose.model('Studies', StudiesSchema)
+const Studies = mongoose.model('Studies', StudiesDBSchema)
 
-export const addNewStudies = (req, res) => {
+const addNewStudies = (req, res) => {
+  // Validate request body
+  const { error } = StudiesValSchema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // Create & Save
   let newStudies = new Studies(req.body)
 
   newStudies.save((err, studies) => {
     if (err) {
-      res.send(err)
+      res.status(400).send(err)
     }
     res.json(studies)
   })
 }
 
-export const getStudies = (req, res) => {
+const getStudies = (req, res) => {
   Studies.find({}, (err, studies) => {
     if (err) {
       res.send(err)
@@ -23,7 +28,7 @@ export const getStudies = (req, res) => {
   })
 }
 
-export const getStudiesByID = (req, res) => {
+const getStudiesByID = (req, res) => {
   Studies.findById(req.params.studiesID, (err, studies) => {
     if (err) {
       res.send(err)
@@ -32,20 +37,36 @@ export const getStudiesByID = (req, res) => {
   })
 }
 
-export const updateStudies = (req, res) => {
-  Studies.findOneAndUpdate({ _id: req.params.studiesID }, req.body, { new: true, useFindAndModify: false }, (err, studies) => {
+const updateStudies = (req, res) => {
+  // NEEDS AUTHORIZATION
+
+  // Validate request body
+  const { error } = StudiesValSchema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // Find & Update
+  Studies.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, studies) => {
     if (err) {
-      res.send(err)
+      res.status(400).send(err)
     }
     res.json(studies)
   })
 }
 
-export const deleteStudies = (req, res) => {
-  Studies.remove({ _id: req.params.studiesID }, (err, studies) => {
+const deleteStudies = (req, res) => {
+  // NEEDS AUTHORIZATION
+  Studies.deleteOne({ _id: req.body._id }, (err, studies) => {
     if (err) {
-      res.send(err)
+      res.status(400).send(err)
     }
-    res.json({ message: 'Successfully deleted job' })
+    res.json({ message: 'Successfully deleted course' })
   })
+}
+
+module.exports = {
+  addNewStudies,
+  getStudies,
+  getStudiesByID,
+  updateStudies,
+  deleteStudies
 }

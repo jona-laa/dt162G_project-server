@@ -1,20 +1,24 @@
-import mongoose from 'mongoose'
-import { WorkSchema } from '../models/workModel.js'
+const mongoose = require('mongoose');
+const { WorkDBSchema, WorkValSchema } = require('../models/workModel.js');
 
-const Work = mongoose.model('Work', WorkSchema)
+const Work = mongoose.model('Work', WorkDBSchema)
 
-export const addNewWork = (req, res) => {
+const addNewWork = (req, res) => {
+  // Validate request body
+  const { error } = WorkValSchema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // Create & Save
   let newWork = new Work(req.body)
-
   newWork.save((err, work) => {
     if (err) {
-      res.send(err)
+      res.status(400).send(err)
     }
     res.json(work)
   })
 }
 
-export const getWork = (req, res) => {
+const getWork = (req, res) => {
   Work.find({}, (err, work) => {
     if (err) {
       res.send(err)
@@ -23,7 +27,7 @@ export const getWork = (req, res) => {
   })
 }
 
-export const getWorkByID = (req, res) => {
+const getWorkByID = (req, res) => {
   Work.findById(req.params.workID, (err, work) => {
     if (err) {
       res.send(err)
@@ -32,20 +36,36 @@ export const getWorkByID = (req, res) => {
   })
 }
 
-export const updateWork = (req, res) => {
-  Work.findOneAndUpdate({ _id: req.params.workID }, req.body, { new: true, useFindAndModify: false }, (err, work) => {
+const updateWork = (req, res) => {
+  // NEEDS AUTHORIZATION
+
+  // Validate request body
+  const { error } = WorkValSchema.validate(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+
+  // Find & Update
+  Work.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, work) => {
     if (err) {
-      res.send(err)
+      res.status(400).send(err)
     }
     res.json(work)
   })
 }
 
-export const deleteWork = (req, res) => {
-  Work.remove({ _id: req.params.workID }, (err, work) => {
+const deleteWork = (req, res) => {
+  // NEEDS AUTHORIZATION
+  Work.deleteOne({ _id: req.body._id }, (err, work) => {
     if (err) {
-      res.send(err)
+      res.status(400).send(err)
     }
     res.json({ message: 'Successfully deleted job' })
   })
+}
+
+module.exports = {
+  addNewWork,
+  getWork,
+  getWorkByID,
+  updateWork,
+  deleteWork
 }

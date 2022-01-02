@@ -1,10 +1,12 @@
-import express from 'express'
-import routes from './src/routes/routes.js'
-import mongoose from 'mongoose'
-import cors from 'cors'
-import dotenv from 'dotenv'
-
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
 dotenv.config()
+// Routes
+const contentRoute = require('./src/routes/content')
+const authRoute = require('./src/routes/auth')
+
 const app = express()
 const PORT = 4000
 
@@ -26,7 +28,8 @@ mongoose.connect(process.env.MONGO_REMOTE, {
 }, () => console.log('Connected to database...'))
 
 /*** USE ROUTES ***/
-routes(app)
+app.use('/api/content', contentRoute);
+app.use('/api/auth', authRoute);
 
 //*** RUN SERVER ***//
 app.listen(PORT, () => {
