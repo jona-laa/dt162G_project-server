@@ -1,27 +1,51 @@
 const mongoose = require('mongoose');
-const { UserDBSchema, UserValSchema } = require('../models/userModel');
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { UserDBSchema } = require('../models/userModel');
 const User = mongoose.model('User', UserDBSchema);
 
+/*** REGISTER ***/
 const addNewUser = async (req, res) => {
-  // Validate request body
-  const { error } = UserValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  // Check for existing users
+  const userExists = await User.findOne({ username: req.body.username });
+  if (userExists) return res.status(400).send('Username is already in use')
+
+  // Gen salt & hash user password
+  const salt = await bcrypt.genSalt(16);
+  const hashedPassord = await bcrypt.hash(req.body.password, salt);
 
   // Create & Save
-  let newUser = new User(req.body)
+  let newUser = new User({
+    username: req.body.username,
+    password: hashedPassord
+  })
   newUser.save((err, user) => {
     if (err) {
       res.status(400).send(err)
     }
-    res.json(user)
+    res.json(`User ${user.username} created`)
   })
+}
+
+
+
+/*** LOGIN ***/
+const loginUser = async (req, res) => {
+  // Check if user exists
+  const user = await User.findOne({ username: req.body.username });
+  if (!user) return res.status(400).send('Username or password is incorrect')
+
+  // Check password
+  const correctPassword = await bcrypt.compare(req.body.password, user.password)
+  if (!correctPassword) return res.status(400).send('Username or password is incorrect')
+
+  // Create JWT
+  const authToken = jwt.sign({ _id: user.id }, process.env.JWT_SECRET);
+
+  res.header('jwt', authToken).send(authToken);
 }
 
 module.exports = {
   addNewUser,
-  // getSkills,
-  // getSkillByID,
-  // updateSkill,
-  // deleteSkill
+  loginUser
 }

@@ -1,11 +1,21 @@
 const router = require('express').Router();
-const { addNewUser } = require('../controllers/userController');
+const { addNewUser, loginUser } = require('../controllers/userController');
+const { verifyRegister } = require('../middleware/verification/tokenVerification');
+const validateUser = require('../middleware/validation/userValidation');
 
 router
-  .post('/register', addNewUser)
+  .post(
+    '/register',
+    verifyRegister,
+    validateUser,
+    addNewUser
+  );
 
 router
-  .post('/login', (req, res) => {
-    res.send('Login')
-  })
+  .post(
+    '/login',
+    validateUser,
+    loginUser
+  );
+
 module.exports = router;

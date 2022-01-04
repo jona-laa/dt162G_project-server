@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
-const { ProjectDBSchema, ProjectValSchema } = require('../models/projectModel.js');
+const { ProjectDBSchema } = require('../models/projectModel.js');
 
 const Project = mongoose.model('Projects', ProjectDBSchema)
 
 const addNewProject = (req, res) => {
-  // NEEDS AUTHORIZATION
-
-  // Validate request body
-  const { error } = ProjectValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   // Create & Save
   let newProject = new Project(req.body)
   newProject.save((err, project) => {
@@ -40,12 +34,6 @@ const getProjectByID = (req, res) => {
 }
 
 const updateProject = (req, res) => {
-  // NEEDS AUTHORIZATION
-
-  // Validate request body
-  const { error } = ProjectValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   // Find & Update
   Project.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, project) => {
     if (err) {

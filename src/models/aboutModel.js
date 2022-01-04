@@ -1,25 +1,6 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
-// VALIDATION SCHEMA
-const AboutValSchema = Joi.object({
-  _id: Joi.string(),
-  heading: Joi.string()
-    .min(8)
-    .max(256)
-    .required(),
-  bio: Joi.string()
-    .min(64)
-    .max(1024)
-    .required(),
-  img_src: Joi.string()
-    .min(1)
-    .max(256)
-    .required(),
-})
-
-
-
 // DB SCHEMA
 const Schema = mongoose.Schema
 const AboutDBSchema = new Schema({
@@ -49,5 +30,4 @@ const AboutDBSchema = new Schema({
 
 module.exports = {
   AboutDBSchema,
-  AboutValSchema
 };

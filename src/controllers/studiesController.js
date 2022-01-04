@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
-const { StudiesDBSchema, StudiesValSchema } = require('../models/studiesModel.js');
+const { StudiesDBSchema } = require('../models/studiesModel.js');
 
 const Studies = mongoose.model('Studies', StudiesDBSchema)
 
 const addNewStudies = (req, res) => {
-  // Validate request body
-  const { error } = StudiesValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   // Create & Save
   let newStudies = new Studies(req.body)
 
@@ -38,12 +34,6 @@ const getStudiesByID = (req, res) => {
 }
 
 const updateStudies = (req, res) => {
-  // NEEDS AUTHORIZATION
-
-  // Validate request body
-  const { error } = StudiesValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   // Find & Update
   Studies.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, studies) => {
     if (err) {

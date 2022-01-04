@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
-const { SkillsDBSchema, SkillsValSchema } = require('../models/skillsModel.js');
+const { SkillsDBSchema } = require('../models/skillsModel.js');
 
 const Skills = mongoose.model('Skills', SkillsDBSchema)
 
 const addNewSkill = (req, res) => {
-  // Validate request body
-  const { error } = SkillsValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   // Create & Save
   let newSkill = new Skills(req.body)
 
@@ -38,12 +34,6 @@ const getSkillByID = (req, res) => {
 }
 
 const updateSkill = (req, res) => {
-  // NEEDS AUTHORIZATION
-
-  // Validate request body
-  const { error } = SkillsValSchema.validate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
-
   // Find & Update
   Skills.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, skill) => {
     if (err) {

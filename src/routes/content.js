@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 // Controllers
 const { addNewAbout, deleteAbout, getAbout, getAboutByID, updateAbout } = require('../controllers/aboutController.js');
 const { addNewSkill, getSkills, getSkillByID, updateSkill, deleteSkill } = require('../controllers/skillsController.js');
@@ -6,91 +7,182 @@ const { addNewWork, getWork, getWorkByID, updateWork, deleteWork } = require('..
 const { addNewStudies, getStudies, getStudiesByID, updateStudies, deleteStudies } = require('../controllers/studiesController.js');
 const { addNewProject, deleteProject, getProjectByID, getProjects, updateProject } = require('../controllers/projectController.js');
 
-// SKILLS //
+// Validate & Verify
+const { verifyToken } = require('../middleware/verification/tokenVerification');
+const { validateAbout, validateProject, validateSkill, validateStudies, validateWork } = require('../middleware/validation')
+
+
+
+/*** ABOUT ***/
 router
-  .get('/skills', (req, res, next) => {
-    console.log(`Req from: ${req.originalUrl}`)
-    console.log(`Req type: ${req.method}`)
-    next()
-  }, getSkills)
+  .get(
+    '/about',
+    getAbout
+  )
 
-  .post('/skills', addNewSkill)
+  .post(
+    '/about',
+    verifyToken,
+    validateAbout,
+    addNewAbout
+  )
 
-  .put('/skills', updateSkill)
+  .put(
+    '/about',
+    verifyToken,
+    validateAbout,
+    updateAbout
+  )
 
-  .delete('/skills', deleteSkill)
-
-router
-  .get('/skills/:skillID', getSkillByID);
-
-
-// ABOUT // NEEDS FIX
-router
-  .get('/about', (req, res, next) => {
-    console.log(`Req from: ${req.originalUrl}`)
-    console.log(`Req type: ${req.method}`)
-    next()
-  }, getAbout)
-
-  .post('/about', addNewAbout)
-
-  .put('/about', updateAbout)
-
-  .delete('/about', deleteAbout);
-
-router
-  .get('/about/:aboutID', getAboutByID);
-
-// WORK // NEEDS FIX
-router
-  .get('/work', (req, res, next) => {
-    console.log(`Req from: ${req.originalUrl}`)
-    console.log(`Req type: ${req.method}`)
-    next()
-  }, getWork)
-
-  .post('/work', addNewWork)
-
-  .put('/work', updateWork)
-
-  .delete('/work', deleteWork)
+  .delete(
+    '/about',
+    verifyToken,
+    deleteAbout
+  );
 
 router
-  .get('/work/:workID', getWorkByID)
+  .get(
+    '/about/:aboutID',
+    getAboutByID
+  );
 
-// STUDIES //
+
+
+/*** PROJECTS ***/
 router
-  .get('/studies', (req, res, next) => {
-    console.log(`Req from: ${req.originalUrl}`)
-    console.log(`Req type: ${req.method}`)
-    next()
-  }, getStudies)
+  .get(
+    '/projects',
+    getProjects
+  )
 
-  .post('/studies', addNewStudies)
+  .post(
+    '/projects',
+    verifyToken,
+    validateProject,
+    addNewProject
+  )
 
-  .put('/studies', updateStudies)
+  .put(
+    '/projects',
+    verifyToken,
+    validateProject,
+    updateProject
+  )
 
-  .delete('/studies', deleteStudies)
-
-router
-  .get('/studies/:studiesID', getStudiesByID)
-
-// PROJECTS //
-router
-  .get('/projects', (req, res, next) => {
-    console.log(`Req from: ${req.originalUrl}`)
-    console.log(`Req type: ${req.method}`)
-    next()
-  }, getProjects)
-
-  .post('/projects', addNewProject)
-
-  .put('/projects', updateProject)
-
-  .delete('/projects', deleteProject)
+  .delete(
+    '/projects',
+    verifyToken,
+    deleteProject
+  )
 
 router
-  .get('/projects/:projectID', getProjectByID)
+  .get(
+    '/projects/:projectID',
+    getProjectByID
+  )
 
+
+
+/*** SKILLS ***/
+router
+  .get(
+    '/skills',
+    getSkills
+  )
+
+  .post(
+    '/skills',
+    verifyToken,
+    validateSkill,
+    addNewSkill
+  )
+
+  .put(
+    '/skills',
+    verifyToken,
+    validateSkill,
+    updateSkill
+  )
+
+  .delete(
+    '/skills',
+    verifyToken,
+    deleteSkill
+  )
+
+router
+  .get(
+    '/skills/:skillID',
+    getSkillByID
+  );
+
+
+
+/*** WORK ***/
+router
+  .get(
+    '/work',
+    getWork
+  )
+
+  .post(
+    '/work',
+    verifyToken,
+    validateWork,
+    addNewWork
+  )
+
+  .put(
+    '/work',
+    verifyToken,
+    validateWork,
+    updateWork
+  )
+
+  .delete(
+    '/work',
+    verifyToken,
+    deleteWork
+  )
+
+router
+  .get(
+    '/work/:workID',
+    getWorkByID)
+
+
+
+/*** STUDIES ***/
+router
+  .get(
+    '/studies',
+    getStudies
+  )
+
+  .post(
+    '/studies',
+    verifyToken,
+    validateStudies,
+    addNewStudies
+  )
+
+  .put(
+    '/studies',
+    verifyToken,
+    validateStudies,
+    updateStudies
+  )
+
+  .delete(
+    '/studies',
+    verifyToken,
+    deleteStudies
+  )
+
+router
+  .get(
+    '/studies/:studiesID',
+    getStudiesByID
+  )
 
 module.exports = router;

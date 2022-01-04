@@ -2,17 +2,20 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 
 // VALIDATION SCHEMA
-const UserValSchema = Joi.object({
-  _id: Joi.string(),
-  username: Joi.string()
-    .min(5)
-    .max(256)
-    .required(),
-  password: Joi.string()
-    .min(8)
-    .max(1024)
-    .required(),
-})
+const validateUser = (userData) => {
+  const UserValSchema = Joi.object({
+    _id: Joi.string(),
+    username: Joi.string()
+      .min(5)
+      .max(256)
+      .required(),
+    password: Joi.string()
+      .min(8)
+      .max(256)
+      .required(),
+  })
+  return UserValSchema.validate(userData);
+}
 
 
 
@@ -29,7 +32,7 @@ const UserDBSchema = new Schema({
     type: String,
     required: true,
     minlength: 8,
-    maxlength: 1024
+    maxlength: 256
   }
 },
   {
@@ -39,5 +42,5 @@ const UserDBSchema = new Schema({
 
 module.exports = {
   UserDBSchema,
-  UserValSchema
+  validateUser,
 };
