@@ -21,7 +21,6 @@ const WorkDBSchema = new Schema({
   },
   date_end: {
     type: Date,
-    required: false
   },
   descr: {
     type: String,

@@ -23,7 +23,7 @@ const validateProject = (req, res, next) => {
 
   const { error } = ProjectValSchema.validate(req.body);
   if (error) {
-    res.status(400).send(error.details[0].message);
+    res.status(400).json({ 'error': error.details[0].message });
   } else {
     next();
   }

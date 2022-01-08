@@ -37,12 +37,12 @@ const loginUser = async (req, res) => {
 
   // Check password
   const correctPassword = await bcrypt.compare(req.body.password, user.password)
-  if (!correctPassword) return res.status(400).send('Username or password is incorrect')
+  if (!correctPassword) return res.status(400).json({ 'errors': 'Username or password is incorrect' })
 
   // Create JWT
   const authToken = jwt.sign({ _id: user.id }, process.env.JWT_SECRET);
 
-  res.header('jwt', authToken).send(authToken);
+  res.header('jwt', authToken).json({ "jwt": authToken });
 }
 
 module.exports = {

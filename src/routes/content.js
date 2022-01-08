@@ -9,7 +9,8 @@ const { addNewProject, deleteProject, getProjectByID, getProjects, updateProject
 
 // Validate & Verify
 const { verifyToken } = require('../middleware/verification/tokenVerification');
-const { validateAbout, validateProject, validateSkill, validateStudies, validateWork } = require('../middleware/validation')
+const { validateAbout, validateProject, validateSkill, validateStudies, validateWork } = require('../middleware/validation');
+const logger = require('../logger/index.js');
 
 
 
@@ -106,6 +107,10 @@ router
 
   .delete(
     '/skills',
+    (req, res, next) => {
+      logger.info(req.ip)
+      next();
+    },
     verifyToken,
     deleteSkill
   )

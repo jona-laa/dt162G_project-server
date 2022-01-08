@@ -13,7 +13,7 @@ const validateWork = (req, res, next) => {
       .required(),
     date_start: Joi.date()
       .required(),
-    date_end: Joi.date(),
+    date_end: Joi.date().allow('').optional(),
     descr: Joi.string()
       .min(8)
       .max(128)
@@ -22,7 +22,7 @@ const validateWork = (req, res, next) => {
 
   const { error } = WorkValSchema.validate(req.body);
   if (error) {
-    res.status(400).send(error.details[0].message);
+    res.status(400).json({ 'error': error.details[0].message });
   } else {
     next();
   }
