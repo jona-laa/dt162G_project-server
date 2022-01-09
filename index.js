@@ -1,7 +1,9 @@
 const express = require('express');
+const fileUpload = require('express-fileupload')
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 dotenv.config()
 // Routes
 const contentRoute = require('./src/routes/content')
@@ -19,6 +21,8 @@ app.all('/*', function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET,PUT,PATCH,POST,DELETE");
   next();
 });
+app.use('/api/content/images', express.static(path.join(__dirname, '/src/routes/uploads')))
+app.use(fileUpload());
 
 /*** MONGOOSE MONGODB CONNECTION ***/
 mongoose.Promise = global.Promise

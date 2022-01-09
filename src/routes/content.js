@@ -190,4 +190,27 @@ router
     getStudiesByID
   )
 
+
+
+/*** UPLOADS ***/
+router
+  .post(
+    '/uploads', (req, res) => {
+      if (req.files === null) {
+        return res.status(400).json({ message: 'No file was uploaded' })
+      }
+
+      const file = req.files.file;
+
+      file.mv(`${__dirname}/uploads/${file.name}`, err => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: err });
+        }
+
+        res.json({ fileName: file.name, filePath: `/uploads/${file.name}` });
+      })
+    }
+  )
+
 module.exports = router;
