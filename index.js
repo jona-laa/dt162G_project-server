@@ -35,6 +35,7 @@ mongoose.connect(process.env.MONGO_REMOTE, {
 app.use('/api/content', contentRoute);
 app.use('/api/auth', authRoute);
 
+app.get('/', (req, res) => res.send('Hello world!'))
 //*** RUN SERVER ***//
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
