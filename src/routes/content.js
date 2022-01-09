@@ -18,6 +18,10 @@ const logger = require('../logger/index.js');
 router
   .get(
     '/about',
+    (req, res, next) => {
+      logger.info(req.path)
+      next();
+    },
     getAbout
   )
 
@@ -107,10 +111,6 @@ router
 
   .delete(
     '/skills',
-    (req, res, next) => {
-      logger.info(req.ip)
-      next();
-    },
     verifyToken,
     deleteSkill
   )
@@ -195,7 +195,9 @@ router
 /*** UPLOADS ***/
 router
   .post(
-    '/uploads', (req, res) => {
+    '/uploads',
+    verifyToken,
+    (req, res) => {
       if (req.files === null) {
         return res.status(400).json({ message: 'No file was uploaded' })
       }

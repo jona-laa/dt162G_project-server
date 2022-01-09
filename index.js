@@ -10,7 +10,7 @@ const contentRoute = require('./src/routes/content')
 const authRoute = require('./src/routes/auth')
 
 const app = express()
-const PORT = 4000
+const PORT = process.env.PORT || 4000;
 
 /*** MIDDLEWARE ***/
 app.use(express.json())
