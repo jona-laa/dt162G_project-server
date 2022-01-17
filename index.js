@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const logger = require('./src/logger/')
 dotenv.config()
 // Routes
 const contentRoute = require('./src/routes/content')
@@ -24,6 +25,9 @@ app.all('/*', function (req, res, next) {
 app.use('/api/content/images', express.static(path.join(__dirname, '/src/routes/uploads')))
 app.use(fileUpload());
 
+logger.info('server started')
+logger.warn('hello')
+
 /*** MONGOOSE MONGODB CONNECTION ***/
 mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGO_REMOTE, {
@@ -35,8 +39,7 @@ mongoose.connect(process.env.MONGO_REMOTE, {
 app.use('/api/content', contentRoute);
 app.use('/api/auth', authRoute);
 
-app.get('/', (req, res) => res.send('Hello world!'))
-//*** RUN SERVER ***//
+/*** RUN SERVER ***/
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

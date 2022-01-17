@@ -9,7 +9,7 @@ const addNewSkill = (req, res) => {
 
   newSkill.save((err, skill) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json(skill)
   })
@@ -18,7 +18,7 @@ const addNewSkill = (req, res) => {
 const getSkills = (req, res) => {
   Skills.find({}, (err, skill) => {
     if (err) {
-      res.send(err)
+      res.status(400).json({ error: err })
     }
     res.json(skill)
   })
@@ -27,7 +27,7 @@ const getSkills = (req, res) => {
 const getSkillByID = (req, res) => {
   Skills.findById(req.params.skillID, (err, skill) => {
     if (err) {
-      res.send(err)
+      res.status(400).json({ error: err })
     }
     res.json(skill)
   })
@@ -37,7 +37,7 @@ const updateSkill = (req, res) => {
   // Find & Update
   Skills.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, skill) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json(skill)
   })
@@ -46,7 +46,7 @@ const updateSkill = (req, res) => {
 const deleteSkill = (req, res) => {
   Skills.deleteOne({ _id: req.body._id }, (err, skill) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json({ message: 'Successfully deleted skill ' })
   })

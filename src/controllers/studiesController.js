@@ -9,7 +9,7 @@ const addNewStudies = (req, res) => {
 
   newStudies.save((err, studies) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json(studies)
   })
@@ -18,7 +18,7 @@ const addNewStudies = (req, res) => {
 const getStudies = (req, res) => {
   Studies.find({}, (err, studies) => {
     if (err) {
-      res.send(err)
+      res.status(400).json({ error: err })
     }
     res.json(studies)
   })
@@ -27,7 +27,7 @@ const getStudies = (req, res) => {
 const getStudiesByID = (req, res) => {
   Studies.findById(req.params.studiesID, (err, studies) => {
     if (err) {
-      res.send(err)
+      res.status(400).json({ error: err })
     }
     res.json(studies)
   })
@@ -37,7 +37,7 @@ const updateStudies = (req, res) => {
   // Find & Update
   Studies.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, studies) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json(studies)
   })
@@ -47,7 +47,7 @@ const deleteStudies = (req, res) => {
   // NEEDS AUTHORIZATION
   Studies.deleteOne({ _id: req.body._id }, (err, studies) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json({ message: 'Successfully deleted course' })
   })

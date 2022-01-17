@@ -15,6 +15,8 @@ const verifyToken = (req, res, next) => {
 
 const verifyRegister = (req, res, next) => {
   const token = req.header('registerToken');
+  if (!token) return res.status(401).json({ 'message': 'Unauthorized request' })
+
   if (token === process.env.REGISTER_TOKEN) {
     next()
   } else {

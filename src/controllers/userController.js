@@ -21,9 +21,9 @@ const addNewUser = async (req, res) => {
   })
   newUser.save((err, user) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
-    res.json(`User ${user.username} created`)
+    res.json({ message: `User ${user.username} created` })
   })
 }
 
@@ -33,11 +33,11 @@ const addNewUser = async (req, res) => {
 const loginUser = async (req, res) => {
   // Check if user exists
   const user = await User.findOne({ username: req.body.username });
-  if (!user) return res.status(400).send('Username or password is incorrect')
+  if (!user) return res.status(400).json({ error: 'Username or password is incorrect' })
 
   // Check password
   const correctPassword = await bcrypt.compare(req.body.password, user.password)
-  if (!correctPassword) return res.status(400).json({ 'errors': 'Username or password is incorrect' })
+  if (!correctPassword) return res.status(400).json({ error: 'Username or password is incorrect' })
 
   // Create JWT
   const authToken = jwt.sign({ _id: user.id }, process.env.JWT_SECRET);

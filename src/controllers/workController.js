@@ -8,7 +8,7 @@ const addNewWork = (req, res) => {
   let newWork = new Work(req.body)
   newWork.save((err, work) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json(work)
   })
@@ -17,7 +17,7 @@ const addNewWork = (req, res) => {
 const getWork = (req, res) => {
   Work.find({}, (err, work) => {
     if (err) {
-      res.send(err)
+      res.status(400).json({ error: err })
     }
     res.json(work)
   })
@@ -26,7 +26,7 @@ const getWork = (req, res) => {
 const getWorkByID = (req, res) => {
   Work.findById(req.params.workID, (err, work) => {
     if (err) {
-      res.send(err)
+      res.status(400).json({ error: err })
     }
     res.json(work)
   })
@@ -36,7 +36,7 @@ const updateWork = (req, res) => {
   // Find & Update
   Work.findOneAndUpdate({ _id: req.body._id }, req.body, { new: true, useFindAndModify: false }, (err, work) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json(work)
   })
@@ -46,7 +46,7 @@ const deleteWork = (req, res) => {
   // NEEDS AUTHORIZATION
   Work.deleteOne({ _id: req.body._id }, (err, work) => {
     if (err) {
-      res.status(400).send(err)
+      res.status(400).json({ error: err })
     }
     res.json({ message: 'Successfully deleted job' })
   })
